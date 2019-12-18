@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="stylesheet" type="text/css" href="../../../static/css/bootstrap.css">
+        <script type="text/javascript" src="../../../static/js/html5shiv.js"></script>
+        <script type="text/javascript" src="../../../static/js/respond.js"></script>
+	    <script type="text/javascript" src="../../../static/js/jQuery.js"></script>
+        <script src="../../../static/js/jquery.simple-dtpicker.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../../static/css/jquery.simple-dtpicker.css">
+        <link rel="shortcut icon" href="../../../static/img/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../../../static/img/favicon.ico" type="image/x-icon">
+        <link href="../../../static/bootstrap4-glyphicons/css/bootstrap-glyphicons.min.css" rel="stylesheet" type="text/css" />
+        <style>
+            body{
+                background-color:rgba(20,20,20,1);
+            }
+            .btn-info {
+                color: white !important;
+            }
+            @media screen and (max-width: 576px){
+                #link2 { margin-right: 0.75rem !important;}
+                #resize { margin-left: 0 !important;
+                margin-right: 0.1rem;}
+            }
+
+        </style>
+        <title>Sensor {{id}}</title>
+    </head>
+    <body>
+        <a class="btn btn-outline-info" role="button" href="{% url 'Noise_Pollution:sensors' %}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a>
+        <a class="btn btn-outline-info" role="button" href="{% url 'Noise_Pollution:index' %}" >Home</a>
+        <h1 class="display-4 text-info py-3 pl-4" style="font-size:8vh;">History Sensor {{id}}</h1>
+
+        <div id="resize" class="row d-flex justify-content-around px-5 ml-4">
+            <div class="ml-0 pl-0 col-xl-4 col-md-10 mt-5">
+                <p class="text-info display-5 mb-1">Select a Day:</p>
+                <div class="pl-2 row">
+                    <input id="input_date" type="text" name="date" value="" class="col-sm-11 col-md-11 col-xl-6 mx-2 my-2">
+                    <a id="link" class="btn btn-info col-xl-3 col-md-11 col-sm-11 mx-2 my-2 px-0" role="button" onclick="f()">Get Chart</a>
+                </div>
+            </div>
+            <div class="ml-0 pl-0 col-xl-6 col-md-10 mt-5">
+                <p class="text-info display-5 mb-1 ml-1">Select a Period (max. one week long):</p>
+                <div class="row ml-0">
+                    <div class="row col-sm-12 col-md-12 col-xl-5 px-0 ml-1">
+                        <p class="text-secondary mt-1 mx-0 px-0 pt-2 col-xl-4 col-md-2 col-sm-2">Start Date: </p>
+                        <input type="text" class="dtpicker2 mr-3 my-2 col-xl-7 col-md-9 col-sm-9" name="startdt2" id="startdt2" value="">
+                    </div>
+                    <div class="row col-md-12 col-xl-5 col-sm-12 px-0 ml-1">
+                        <p class="text-secondary mt-1 mx-0 px-0 pt-2 col-xl-4 col-md-2 col-sm-2">End Date: </p>
+                        <input type="text" class="dtpicker2 mr-3 my-2 col-xl-7 col-md-9 col-sm-9" name="enddt2" id="enddt2" value="">
+                    </div>
+                    <a id="link2" class="btn btn-info my-2 col-xl-2 col-md-11 col-sm-11 ml-1 px-0" role="button" onclick="g()">Get Chart</a>
+                </div>
+            </div>
+        </div>
+    <script type="text/javascript">
+            $(function(){
+                $('*[name=date]').appendDtpicker({
+                    "inline": false,
+                    "dateOnly": true,
+                    });
+            });
+
+            function f() {
+                var date = document.getElementById('input_date').value;
+                console.log(date)
+                var url= "history_one_day/"+date;
+                document.getElementById("link").setAttribute("href", url)
+            };
+            $(function () {
+                $('.dtpicker2').appendDtpicker({"futureOnly": false, "dateOnly": true,});
+                $('#startdt2').change(function () {
+                    var de = new Date($('#startdt2').handleDtpicker('getDate')); // constructor need to avoid linking object
+                    de.setDate(de.getDate() + 7);
+                    $('#enddt2').handleDtpicker('setMaxDate', de); //set min end date is 7 day later then start date
+                });
+                $('#startdt2').change(function () {
+                    var de = new Date($('#startdt2').handleDtpicker('getDate')); // constructor need to avoid linking object
+                    $('#enddt2').handleDtpicker('setMinDate', de); //set min end date is 7 day later then start date
+                });
+                $('#enddt2').change(function () {
+                    var ds = new Date($('#enddt2').handleDtpicker('getDate'));
+                    ds.setDate(ds.getDate() - 7);
+                    $('#startdt2').handleDtpicker('setMinDate', ds); //set max end date is 7 day earlier then end date
+                });
+                $('#enddt2').change(function () {
+                    var ds = new Date($('#enddt2').handleDtpicker('getDate'));
+                    $('#startdt2').handleDtpicker('setMaxDate', ds); //set max end date is 7 day earlier then end date
+                });
+            });
+            function g() {
+                var datestart = document.getElementById('startdt2').value;
+                var dateend = document.getElementById('enddt2').value;
+                var url= "history_more_days/"+datestart+"/"+dateend;
+                document.getElementById("link2").setAttribute("href", url)
+            };
+
+    </script>
+    </body>
+</html>

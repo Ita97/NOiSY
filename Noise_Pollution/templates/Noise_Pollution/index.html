@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="stylesheet" type="text/css" href="../../../static/css/bootstrap.css">
+        <link rel="stylesheet" type="text/css" href="../../../static/css/font.css">
+        <link rel="shortcut icon" href="../../../static/img/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../../../static/img/favicon.ico" type="image/x-icon">
+        <link href="../../../static/bootstrap4-glyphicons/css/bootstrap-glyphicons.min.css" rel="stylesheet" type="text/css" />
+        <style>
+            html, body{ max-height: 100%;}
+            body{
+                background-color:rgba(20,20,20,1);
+            }
+            .btn-outline-primary{
+                background-color: rgba(0, 123, 239, 0.6);
+                color: white;
+            }
+            .btn-outline-danger{
+                background-color: rgba(217,83,79, 0.4);
+                color: white;
+            }
+            .lead{
+                font-size: 35px;
+            }
+            @media screen and (max-width: 600px){
+                .display-3 {font-size:3rem !important;}
+                .album { padding-top: 0rem !important;}
+            }
+            @media screen and (max-width: 1005px) and (min-width: 768px){
+                .alg1 {padding-top:0 !important;
+            }
+            @media screen and (max-width: 991px) and (min-width: 768px){
+                .alg2 {padding-top:0 !important;
+            }
+        </style>
+        <title>Noise Pollution Detector</title>
+    </head>
+    <body>
+        <div class="text-center p-5 my-3" style="min-height: 4rem;">
+            <h1 class="display-3 text-info">Noise Pollution Detector</h1>
+        </div>
+        <div class="album p-5" style="min-width:100%;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12 col-md-4 my-0 pt-2" >
+                        <a href="{% url 'Noise_Pollution:sensors' %}" class="btn btn-outline-info" role="button" style="height:220px; width:100%; display: block;"><div class="py-4 my-5 lead">History</div></a>
+                    </div>
+                    <div class="col-sm-12 col-md-4 pt-2" >
+                        <a href="{% url 'Noise_Pollution:rooms' %}" class="btn btn-outline-info" role="button" style="height:220px; width:100%; display: block;"><div class="py-4 my-5 lead alg2">Check Rooms</div></a>
+                    </div>
+                    <div class="col-sm-12 col-md-4 pt-2">
+                        <a href="{% url 'Noise_Pollution:manage_sensors' %}" class="btn btn-outline-info" role="button" style="height:220px; width:100%; display: block;"><div class="py-4 my-5 lead alg1">Manage Sensors</div></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="../../../static/js/jQuery.js"></script>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    </body>
+</html>

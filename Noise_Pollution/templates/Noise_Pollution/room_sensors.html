@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <link rel="stylesheet" type="text/css" href="../../../static/css/bootstrap.css">
+        <script type="text/javascript" src="../../../static/js/chart.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
+        <script src="../../../static/js/util.js"></script>
+        <script type="text/javascript" src="../../../static/js/loader.js"></script>
+        <script type="text/javascript" src="../../../static/js/html5shiv.js"></script>
+        <script type="text/javascript" src="../../../static/js/respond.js"></script>
+	    <script type="text/javascript" src="../../../static/js/jQuery.js"></script>
+        <script type="text/javascript" src="../../../static/js/chartjs-plugin-annotation.js"></script>
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <link rel="shortcut icon" href="../../../static/img/favicon.ico" type="image/x-icon">
+        <link rel="icon" href="../../../static/img/favicon.ico" type="image/x-icon">
+        <link href="../../../static/bootstrap4-glyphicons/css/bootstrap-glyphicons.min.css" rel="stylesheet" type="text/css" />
+        <style>
+            body,html{ max-width: 100vw; overflow-x:hidden;}
+            body{
+                background-color:rgba(20,20,20,1);
+            }
+            @media screen and (max-width: 600px){
+                .display-4 {font-size:3rem !important;}
+            }
+        </style>
+        <title>Room Sensors</title>
+    </head>
+    <body>
+        <a class="btn btn-outline-info" role="button" href="{% url 'Noise_Pollution:rooms' %}"><span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span></a>
+        <a class="btn btn-outline-info" role="button" href="{% url 'Noise_Pollution:index' %}" >Home</a>
+        {% if sensori_list %}
+            <h1 class="display-4 text-info py-3 pl-4">{{ room.name }}</h1>
+            <hr/><hr/>
+
+            <div class="row d-flex justify-content-around m-4">
+            {% for sens in sensori_list %}
+                <div id="real_time_chart{{sens.id}}" class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-xs-12 mb-1" style="background-color:rgba(0,0,0,0.9);">
+                    <canvas id="myChart{{sens.id}}" ></canvas>
+                </div>
+            {% endfor %}
+            </div>
+        {% else %}
+            <hr/>
+            <p class="text-secondary display-4">No sensors are available.</p>
+        {% endif %}
+    </body>
+    <script>
+        var defaultData = []
+        var labels = []
+        {% for sens in sensori_list %}
+        var config{{sens.id}} = {
+			type: 'line',
+			data: {
+				labels: labels,
+				datasets: [{
+					borderColor: "rgba(91,192,222,1)",
+                    backgroundColor: "rgba(91,192,222,1)",
+					data: defaultData,
+					fill: false,
+				}],
+			},
+			options: {
+				responsive: true,
+				title: {
+					display: true,
+					text: 'Real-time Sensor {{sens.id}}'
+				},
+				tooltips: {
+					mode: 'index',
+					intersect: false,
+				},
+				annotation: {
+                    annotations: [{
+                        type: 'line',
+                        mode: 'horizontal',
+                        scaleID: 'y-axis-0',
+                        value: 70,
+                        borderColor: 'rgb(255, 99, 132)',
+                        borderWidth: 2,
+                        label: {
+                            enabled: false,
+                            content: 'Test label'
+                        }
+                    }]
+                },
+				hover: {
+					mode: 'nearest',
+					intersect: true
+				},
+                legend:{
+			        display: false
+                },
+				scales: {
+					xAxes: [{
+					    gridLines:{
+					        display: false,
+                            color: '#909497',
+                            drawOnChartArea: true,
+                        },
+                        display: true,
+                        color: "rgba(91,192,222,1)",
+                        scaleLabel: {
+						    fontColor: "rgba(91,192,222,1)",
+							display: true,
+                            labelColor: "rgba(91,192,222,1)",
+							labelString: 'Time'
+						}
+					}],
+					yAxes: [{
+					    gridLines:{
+                            display: true,
+                            color: '#909497',
+                            drawOnChartArea: true,
+                        },
+						display: true,
+                        color: "rgba(91,192,222,1)",
+						scaleLabel: {
+                            fontColor: "rgba(91,192,222,1)",
+                            display: true,
+                            labelColor: "rgba(91,192,222,1)",
+                            labelString: 'Decibel'
+						}
+					}]
+				}
+			}
+		};
+		{% endfor %}
+        window.onload = function() {
+            {% for sens in sensori_list %}
+			    var ctx{{sens.id}} = document.getElementById('myChart{{sens.id}}').getContext('2d');
+			    window.myLine{{sens.id}} = new Chart(ctx{{sens.id}}, config{{sens.id}});
+            {% endfor %}
+            updateChart();
+		};
+
+        function updateChart(){
+            {% for sens in sensori_list %}
+                setTimeout(function(){
+                    var endpoint = '/Noise_Pollution/{{sens.id}}/chart_data/';
+                    var defaultData = [];
+                    var labels = [];
+                    $.ajax({
+                        method: "GET",
+                        url: endpoint,
+                        success: function (data) {
+                            labels = data.labels;
+                            defaultData = data.dati;
+                            console.log(labels);
+                            console.log(defaultData);
+                            var newData = {
+                                labels: labels,
+                                datasets: [{
+                                    backgroundColor: "rgba(91,192,225,0.7)",
+                                    borderColor: "rgba(91,192,225,0.7)",
+                                    data: defaultData,
+                                    fill: false,
+                                }]
+                            };
+                            config{{sens.id}}.data = newData;
+                            window.myLine{{sens.id}}.update({duration:0});
+                            updateChart();
+                        },
+                        error: function (error_data) {
+                            console.log("error");
+                            console.log(error_data);
+                        }
+                    });
+			    }, 1000);
+			 {% endfor %}
+        };
+    </script>
+</html>
