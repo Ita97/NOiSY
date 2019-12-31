@@ -1,7 +1,7 @@
-# Noise Pollution Detector
+# NOiSY
 ### Description
 
-Based on Django Framework and Arduino Code.
+Based on Django Framework and Arduino Code, NOiSY is a Noise Pollution Detector.
 This application web can manage rumor sensors and rooms and its purpose is to prevent noise pollution.
 
 Using an ESP32 the sensors send info to the app, you can check in real-time the noise in every rooms with a sensor inside.
