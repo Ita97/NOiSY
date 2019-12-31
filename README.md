@@ -27,5 +27,5 @@ Then you have to calibrate it.
 The sensor we used was not very accurate, and we use an SPL meter to configure it.
 Install the ConfigCode in the ESP32 and find the value of the sensor, better if you twist the potentiometer until the values reach 400, 
 and then check the decibel on your SPL meter (a free app on your phone is fine).
-Write down this two value on the AnalogicalSensorCode with the id and the key received by mail.
+Write down these two values on the AnalogicalSensorCode with the id and the key received by mail.
 Now you can install it and check the value you obtain in decibel.
