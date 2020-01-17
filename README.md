@@ -10,7 +10,7 @@ Plus you can virtually manage all your sensors: move, delete it or also change i
 Same story for the rooms.
 
 The app is programmed to send an email to a 'rep' of the room when the threshold of 70dB is passed, 
-for comunicate that you are in a noise polluted area and to speak slowly for your health.
+to comunicate that you are in a noise polluted area and to speak slowly for your health.
 
 This application is a must for offices or labs where the work is difficoult with high noises, but also for an health home life.
 
@@ -27,5 +27,10 @@ Then you have to calibrate it.
 The sensor we used was not very accurate, and we use an SPL meter to configure it.
 Install the ConfigCode in the ESP32 and find the value of the sensor, better if you twist the potentiometer until the values reach 400, 
 and then check the decibel on your SPL meter (a free app on your phone is fine).
-Write down these two values on the AnalogicalSensorCode with the id and the key received by mail.
+Write down these two values on the AnalogicalSensorCode with the id and the key received by mail with WiFi credentials.
 Now you can install it and check the value you obtain in decibel.
+
+
+### First Steps
+
+Check the presentation for a speed **tutorial**: https://www.emaze.com/@AOZIWCWZC/noisy
